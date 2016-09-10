@@ -1,0 +1,25 @@
+{
+  "name": "wdi-project-2",
+  "version": "1.0.0",
+  "description": "This is the second project for WDI London",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/abinocoe/wdi-project-2.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/abinocoe/wdi-project-2/issues"
+  },
+  "homepage": "https://github.com/abinocoe/wdi-project-2#readme",
+  "dependencies": {
+    "cheerio": "^0.22.0",
+    "mongoose": "^4.6.0",
+    "request": "^2.74.0",
+    "request-promise": "^4.1.1"
+  }
+}
