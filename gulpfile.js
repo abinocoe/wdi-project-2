@@ -1,5 +1,5 @@
 const gulp     	       = require("gulp");                     // => use gulp
-const babel    	       = require("gulp-babel");               // => es6 to es6 conversion
+const babel    	       = require("gulp-babel");               // => es6 to es5 conversion
 const cleanCSS 	       = require("gulp-clean-css");           // => minify css
 const stripCssComments = require('gulp-strip-css-comments');  // => strip comments from css
 const sass 	   	       = require("gulp-sass");                // => write scss and convert to css

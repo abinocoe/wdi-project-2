@@ -1,0 +1,20 @@
+{
+  "name": "wdi-project-2",
+  "description": "This is the second project for WDI London",
+  "main": "index.js",
+  "authors": [
+    "abinocoe <abigailcoe@gmail.com>"
+  ],
+  "license": "ISC",
+  "homepage": "https://github.com/abinocoe/wdi-project-2",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "^3.1.0"
+  }
+}
