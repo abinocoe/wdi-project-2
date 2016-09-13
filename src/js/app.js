@@ -109,11 +109,17 @@ treasureMap.login = function() {
   if (event) event.preventDefault();
 
   this.$forms.html(`
-    <form action="/login" method="post">
-      <input type="text" id="email" name="email" placeholder="Email">
-      <input type="password" id="password" name="password" placeholder="Password">
-      <input type="submit" value="Signin">
-    </form>
+    <div class="modal fade bd-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="my-modal">
+      <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+          <form action="/login" method="post">
+          <input type="text" id="email" name="email" placeholder="Email">
+          <input type="password" id="password" name="password" placeholder="Password">
+          <input type="submit" value="Signin">
+          </form>
+        </div>
+      </div>
+    </div>
     `);
   };
 
@@ -121,6 +127,9 @@ treasureMap.login = function() {
     if (event) event.preventDefault();
 
     this.$forms.html(`
+<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
       <form action="/register" method="post">
         <input type="text" id="username" name="user[username]"  placeholder="Username">
         <input type="text" id="email" name="user[email]" placeholder="Email">
@@ -128,6 +137,9 @@ treasureMap.login = function() {
         <input type="password" id="password" name="user[passwordConfirmation]"  placeholder="Confirm Password">
         <input type="submit" value="Register">
       </form>
+    </div>
+  </div>
+</div>
       `);
     };
 
@@ -147,6 +159,7 @@ treasureMap.login = function() {
       } else {
         this.loggedOutState();
       }
+
     };
 
     $(treasureMap.init.bind(treasureMap));
