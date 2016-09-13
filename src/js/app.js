@@ -43,7 +43,110 @@ treasureMap.mapSetup = function() {
     mapTypeId: google.maps.MapTypeId.ROADMAP
   };
   this.map = new google.maps.Map(mapArea, mapOptions);
+};
+
+treasureMap.loggedInState = function(){
+  $(".loggedOut").hide();
+  $(".loggedIn").show();
   this.getFinds();
 };
 
-$(treasureMap.mapSetup.bind(treasureMap));
+treasureMap.loggedOutState = function(){
+  $(".loggedOut").show();
+  $(".loggedIn").hide();
+};
+
+treasureMap.setRequestHeader = function(xhr, settings) {
+  return xhr.setRequestHeader("Authorization", `Bearer ${this.getToken()}`);
+};
+
+treasureMap.setToken = function(token){
+  return window.localStorage.setItem("token", token);
+};
+
+treasureMap.getToken = function(){
+  return window.localStorage.getItem("token");
+};
+
+treasureMap.removeToken = function(){
+  return window.localStorage.clear();
+};
+
+treasureMap.ajaxRequest = function(url, method, data, callback){
+  return $.ajax({
+    url,
+    method,
+    data,
+    beforeSend: this.setRequestHeader.bind(this)
+  })
+  .done(callback)
+  .fail(data => {
+    console.log(data);
+  });
+};
+
+treasureMap.handleForm = function(){
+  event.preventDefault();
+
+  let url    = `${treasureMap.apiUrl}${$(this).attr("action")}`;
+  let method = $(this).attr("method");
+  let data   = $(this).serialize();
+
+  return treasureMap.ajaxRequest(url, method, data, (data) => {
+    if (data.token) treasureMap.setToken(data.token);
+    treasureMap.loggedInState();
+  });
+};
+
+treasureMap.logout = function() {
+  event.preventDefault();
+  this.removeToken();
+  this.loggedOutState();
+};
+
+
+treasureMap.login = function() {
+  if (event) event.preventDefault();
+
+  this.$forms.html(`
+    <form action="/login" method="post">
+      <input type="text" id="email" name="email" placeholder="Email">
+      <input type="password" id="password" name="password" placeholder="Password">
+      <input type="submit" value="Signin">
+    </form>
+    `);
+  };
+
+  treasureMap.register = function() {
+    if (event) event.preventDefault();
+
+    this.$forms.html(`
+      <form action="/register" method="post">
+        <input type="text" id="username" name="user[username]"  placeholder="Username">
+        <input type="text" id="email" name="user[email]" placeholder="Email">
+        <input type="password" id="password" name="user[password]"  placeholder="Password">
+        <input type="password" id="password" name="user[passwordConfirmation]"  placeholder="Confirm Password">
+        <input type="submit" value="Register">
+      </form>
+      `);
+    };
+
+    treasureMap.init = function() {
+      this.mapSetup();
+      this.apiUrl = "http://localhost:3000/api";
+      this.$forms = $(".forms");
+      this.$main  = $("main");
+
+      $(".register").on("click", this.register.bind(this));
+      $(".login").on("click", this.login.bind(this));
+      $(".logout").on("click", this.logout.bind(this));
+      this.$forms.on("submit", "form", this.handleForm);
+
+      if (this.getToken()) {
+        this.loggedInState();
+      } else {
+        this.loggedOutState();
+      }
+    };
+
+    $(treasureMap.init.bind(treasureMap));
