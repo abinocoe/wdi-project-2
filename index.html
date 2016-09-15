@@ -1,27 +1,42 @@
 <!DOCTYPE html>
 <html>
-  <head>
+<head>
   <meta charset="utf-8">
   <title>Pleasure Treasure</title>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBxM36DxD-TmmCuWMML0UXBVSirOUkF42Q" charset="utf-8"></script>
-    <script type="text/javascript" src="/js/app.js"></script>
-    <link rel="stylesheet" href="/css/style.css">
-  </head>
-  <body>
-    <header>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBxM36DxD-TmmCuWMML0UXBVSirOUkF42Q" charset="utf-8"></script>
+  <script type="text/javascript" src="/js/app.js"></script>
+  <link href="https://fonts.googleapis.com/css?family=Cormorant+Garamond:400,500,700|Open+Sans" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <header>
+    <div class="widget-pane">
+      <a href="#" class="toggle"><img src="./images/amphora.png"/></a>
       <nav>
         <ul class="loggedOut">
-          <li><a href="#" class="register" data-toggle="modal" data-target=".bd-example-modal-lg">Register</a></li>
-          <li><a href="#" class="login" data-toggle="modal" data-target=".bd-example-modal-sm">Login</a></li>
+          <li><a href="#" class="register" data-toggle="modal" data-target="#registerModal">Register</a></li>
+          <li><a href="#" class="login" data-toggle="modal" data-target="#loginModal">Login</a></li>
         </ul>
         <ul class="loggedIn">
           <li><a href="#" class="logout">Logout</a></li>
         </ul>
       </nav>
-    </header>
-    <main>
-      <div class="forms"></div>
-      <div id="map-canvas"></div>
-    </main>
-  </body>
-  </html>
+      <p id="description-content"></p>
+      <!-- <div class="dropdown">
+        <a class="btn btn-secondary dropdown-toggle" href="http://example.com" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Location
+        </a>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+          <a class="dropdown-item" id="ALL" href="#">All</a>
+          <a class="dropdown-item" id="ROMAN" href="#">Roman</a>
+          <a class="dropdown-item" id="MEDIEVAL" href="#">Medieval</a>
+        </div>
+      </div> -->
+    </div>
+  </header>
+  <main>
+    <div class="forms"></div>
+    <div id="map-canvas"></div>
+  </main>
+</body>
+</html>

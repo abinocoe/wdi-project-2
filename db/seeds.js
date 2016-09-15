@@ -3,8 +3,8 @@ const cheerio    = require('cheerio');
 const mongoose   = require('mongoose');
 const config     = require('../config/config');
 const Find       = require('../models/find');
-//let url          = "https://finds.org.uk/database/search/results/bbox/50.916887%2C-1.544781%2C52.079506%2C1.542377/broadperiod/BRONZE+AGE";
-let url          = "https://finds.org.uk/database/search/results/bbox/51.261915%2C-0.698833%2C51.713416%2C0.388813/show/100/thumbnail/1";
+let url          = "https://finds.org.uk/database/search/results/q/pipe/thumbnail/1";
+//let url          = "https://finds.org.uk/database/search/results/bbox/51.261915%2C-0.698833%2C51.713416%2C0.388813/show/100/thumbnail/1";
 let urlend       = "/format/json";
 let count        = 0;
 

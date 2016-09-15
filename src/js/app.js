@@ -3,13 +3,14 @@ const treasureMap = treasureMap || {};
 treasureMap.addInfoWindow = function(find, pin) {
   google.maps.event.addListener(pin, 'click', () => {
     if (typeof this.infoWindow != 'undefined') this.infoWindow.close();
-    console.log();
     this.infoWindow = new google.maps.InfoWindow({
-      content: `<img src="${find.imageURL}"><p>${find.objectType}</p><p>${find.lat}${find.lng}</p>`
+      content: `<img src="${find.imageURL}"><p>${find.objectType}</p><p>${find.broadPeriod}<p/>`
     });
     this.infoWindow.open(this.map, pin);
     this.map.setCenter(pin.getPosition());
     this.map.panBy(0, -200);
+    this.$desc.html(`<p>${find.objectType}<br><h4>${find.broadPeriod}</h4><br>${find.description}</p>`);
+    $('.widget-pane').addClass('thin');
   });
 };
 
@@ -17,20 +18,26 @@ treasureMap.createFindPin = function(find) {
   let latLng = new google.maps.LatLng(find.lat, find.lng);
   let pin = new google.maps.Marker({
     position: latLng,
-    map: this.map
+    //map: this.map
   });
+  this.markers.push(pin);
   this.addInfoWindow(find, pin);
 };
 
 treasureMap.loopThroughFinds = function(data) {
-  console.log(data);
   $.each(data.finds, (index, find) => {
-    treasureMap.createFindPin(find);
+    this.createFindPin(find);
   });
+
+  var options = {
+    imagePath: 'https://raw.githubusercontent.com/googlemaps/js-marker-clusterer/gh-pages/images/m'
+  };
+
+  let markerCluster = new MarkerClusterer(this.map, this.markers, options);
 };
 
 treasureMap.getFinds = function() {
-  $.get('http://localhost:3000/api/finds').done(this.loopThroughFinds);
+  $.get('http://localhost:3000/api/finds').done(this.loopThroughFinds.bind(this));
   console.log(find.objectType);
 };
 
@@ -40,8 +47,10 @@ treasureMap.mapSetup = function() {
   let mapOptions = {
     zoom: 14,
     center: new google.maps.LatLng(51.506178,-0.088369),
-    mapTypeId: google.maps.MapTypeId.ROADMAP
+    mapTypeId: google.maps.MapTypeId.ROADMAP,
+    styles: [{"featureType":"administrative","elementType":"all","stylers":[{"visibility":"off"}]},{"featureType":"administrative","elementType":"geometry.stroke","stylers":[{"visibility":"on"}]},{"featureType":"administrative","elementType":"labels","stylers":[{"visibility":"on"},{"color":"#716464"},{"weight":"0.01"}]},{"featureType":"administrative.country","elementType":"labels","stylers":[{"visibility":"on"}]},{"featureType":"landscape","elementType":"all","stylers":[{"visibility":"simplified"}]},{"featureType":"landscape.natural","elementType":"geometry","stylers":[{"visibility":"simplified"}]},{"featureType":"landscape.natural.landcover","elementType":"geometry","stylers":[{"visibility":"simplified"}]},{"featureType":"poi","elementType":"all","stylers":[{"visibility":"simplified"}]},{"featureType":"poi","elementType":"geometry.fill","stylers":[{"visibility":"simplified"}]},{"featureType":"poi","elementType":"geometry.stroke","stylers":[{"visibility":"simplified"}]},{"featureType":"poi","elementType":"labels.text","stylers":[{"visibility":"simplified"}]},{"featureType":"poi","elementType":"labels.text.fill","stylers":[{"visibility":"simplified"}]},{"featureType":"poi","elementType":"labels.text.stroke","stylers":[{"visibility":"simplified"}]},{"featureType":"poi.attraction","elementType":"geometry","stylers":[{"visibility":"on"}]},{"featureType":"road","elementType":"all","stylers":[{"visibility":"on"}]},{"featureType":"road.highway","elementType":"all","stylers":[{"visibility":"off"}]},{"featureType":"road.highway","elementType":"geometry","stylers":[{"visibility":"on"}]},{"featureType":"road.highway","elementType":"geometry.fill","stylers":[{"visibility":"on"}]},{"featureType":"road.highway","elementType":"geometry.stroke","stylers":[{"visibility":"simplified"},{"color":"#a05519"},{"saturation":"-13"}]},{"featureType":"road.local","elementType":"all","stylers":[{"visibility":"on"}]},{"featureType":"transit","elementType":"all","stylers":[{"visibility":"simplified"}]},{"featureType":"transit","elementType":"geometry","stylers":[{"visibility":"simplified"}]},{"featureType":"transit.station","elementType":"geometry","stylers":[{"visibility":"on"}]},{"featureType":"water","elementType":"all","stylers":[{"visibility":"simplified"},{"color":"#84afa3"},{"lightness":52}]},{"featureType":"water","elementType":"geometry","stylers":[{"visibility":"on"}]},{"featureType":"water","elementType":"geometry.fill","stylers":[{"visibility":"on"}]}]
   };
+
   this.map = new google.maps.Map(mapArea, mapOptions);
 };
 
@@ -54,6 +63,7 @@ treasureMap.loggedInState = function(){
 treasureMap.loggedOutState = function(){
   $(".loggedOut").show();
   $(".loggedIn").hide();
+  $(".login").trigger("click");
 };
 
 treasureMap.setRequestHeader = function(xhr, settings) {
@@ -91,11 +101,16 @@ treasureMap.handleForm = function(){
   let url    = `${treasureMap.apiUrl}${$(this).attr("action")}`;
   let method = $(this).attr("method");
   let data   = $(this).serialize();
+  $('.modal').modal('toggle');
 
   return treasureMap.ajaxRequest(url, method, data, (data) => {
     if (data.token) treasureMap.setToken(data.token);
     treasureMap.loggedInState();
   });
+};
+
+treasureMap.sidebar = function() {
+  $('.widget-pane').toggleClass('thin');
 };
 
 treasureMap.logout = function() {
@@ -106,19 +121,19 @@ treasureMap.logout = function() {
 
 
 treasureMap.login = function() {
-  if (event) event.preventDefault();
-
+  //if (event) event.preventDefault();
   this.$forms.html(`
-    <div class="modal fade bd-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="my-modal">
-      <div class="modal-dialog modal-sm">
-        <div class="modal-content">
-          <form action="/login" method="post">
-          <input type="text" id="email" name="email" placeholder="Email">
-          <input type="password" id="password" name="password" placeholder="Password">
-          <input type="submit" value="Signin">
-          </form>
-        </div>
-      </div>
+    <div id="loginModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="my-modal">
+    <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+    <h4 class="modal-title">Login<h4>
+    <form action="/login" method="post">
+    <input type="text" id="email" name="email" placeholder="Email"><br>
+    <input type="password" id="password" name="password" placeholder="Password"><br>
+    <input class="enter" type="submit" value="Sign In">
+    </form>
+    </div>
+    </div>
     </div>
     `);
   };
@@ -127,32 +142,39 @@ treasureMap.login = function() {
     if (event) event.preventDefault();
 
     this.$forms.html(`
-<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
+      <div id="registerModal" class="modal fade bd-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="my-modal">
+      <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+      <h4 class="modal-title">Register<h4>
       <form action="/register" method="post">
-        <input type="text" id="username" name="user[username]"  placeholder="Username">
-        <input type="text" id="email" name="user[email]" placeholder="Email">
-        <input type="password" id="password" name="user[password]"  placeholder="Password">
-        <input type="password" id="password" name="user[passwordConfirmation]"  placeholder="Confirm Password">
-        <input type="submit" value="Register">
+      <input type="text" id="username" name="user[username]"  placeholder="Username"><br>
+      <input type="text" id="email" name="user[email]" placeholder="Email"><br>
+      <input type="password" id="password" name="user[password]"  placeholder="Password"><br>
+      <input type="password" id="password" name="user[passwordConfirmation]"  placeholder="Confirm Password"><br>
+      <input class="enter" type="submit" value="Save">
       </form>
-    </div>
-  </div>
-</div>
+      </div>
+      </div>
+      </div>
       `);
     };
 
     treasureMap.init = function() {
+      this.apiUrl  = "http://localhost:3000/api";
+      this.$forms  = $(".forms");
+      this.$main   = $("main");
+      this.markers = [];
+      this.$desc   = $("#description-content");
+
+      this.login.bind(this);
       this.mapSetup();
-      this.apiUrl = "http://localhost:3000/api";
-      this.$forms = $(".forms");
-      this.$main  = $("main");
 
       $(".register").on("click", this.register.bind(this));
       $(".login").on("click", this.login.bind(this));
       $(".logout").on("click", this.logout.bind(this));
+      $(".toggle").on("click", this.sidebar.bind(this));
       this.$forms.on("submit", "form", this.handleForm);
+
 
       if (this.getToken()) {
         this.loggedInState();
