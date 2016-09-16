@@ -9,15 +9,22 @@ treasureMap.addInfoWindow = function(find, pin) {
     this.infoWindow.open(this.map, pin);
     this.map.setCenter(pin.getPosition());
     this.map.panBy(0, -200);
-    this.$desc.html(`<p>${find.objectType}<br><h4>${find.broadPeriod}</h4><br>${find.description}</p>`);
+    this.$desc.html(`<p><h4>${find.objectType}</h4><br><h6>${find.broadPeriod}</h6><br>${find.description}</p>`);
     $('.widget-pane').addClass('thin');
   });
 };
 
 treasureMap.createFindPin = function(find) {
   let latLng = new google.maps.LatLng(find.lat, find.lng);
+  let icon = {
+    url: "./images/amphora.png",
+    scaledSize: new google.maps.Size(25, 25),
+    origin: new google.maps.Point(0,0),
+    anchor: new google.maps.Point(0,0)
+  };
   let pin = new google.maps.Marker({
     position: latLng,
+    icon
     //map: this.map
   });
   this.markers.push(pin);
@@ -30,7 +37,8 @@ treasureMap.loopThroughFinds = function(data) {
   });
 
   var options = {
-    imagePath: 'https://raw.githubusercontent.com/googlemaps/js-marker-clusterer/gh-pages/images/m'
+    imagePath: 'https://raw.githubusercontent.com/googlemaps/js-marker-clusterer/gh-pages/images/m',
+    maxZoom: 10
   };
 
   let markerCluster = new MarkerClusterer(this.map, this.markers, options);
@@ -45,9 +53,10 @@ treasureMap.mapSetup = function() {
   let mapArea = document.getElementById('map-canvas');
 
   let mapOptions = {
-    zoom: 14,
-    center: new google.maps.LatLng(51.506178,-0.088369),
+    zoom: 7,
+    center: new google.maps.LatLng(52.674905,-1.2164698),
     mapTypeId: google.maps.MapTypeId.ROADMAP,
+    disableDefaultUI: true,
     styles: [{"featureType":"administrative","elementType":"all","stylers":[{"visibility":"off"}]},{"featureType":"administrative","elementType":"geometry.stroke","stylers":[{"visibility":"on"}]},{"featureType":"administrative","elementType":"labels","stylers":[{"visibility":"on"},{"color":"#716464"},{"weight":"0.01"}]},{"featureType":"administrative.country","elementType":"labels","stylers":[{"visibility":"on"}]},{"featureType":"landscape","elementType":"all","stylers":[{"visibility":"simplified"}]},{"featureType":"landscape.natural","elementType":"geometry","stylers":[{"visibility":"simplified"}]},{"featureType":"landscape.natural.landcover","elementType":"geometry","stylers":[{"visibility":"simplified"}]},{"featureType":"poi","elementType":"all","stylers":[{"visibility":"simplified"}]},{"featureType":"poi","elementType":"geometry.fill","stylers":[{"visibility":"simplified"}]},{"featureType":"poi","elementType":"geometry.stroke","stylers":[{"visibility":"simplified"}]},{"featureType":"poi","elementType":"labels.text","stylers":[{"visibility":"simplified"}]},{"featureType":"poi","elementType":"labels.text.fill","stylers":[{"visibility":"simplified"}]},{"featureType":"poi","elementType":"labels.text.stroke","stylers":[{"visibility":"simplified"}]},{"featureType":"poi.attraction","elementType":"geometry","stylers":[{"visibility":"on"}]},{"featureType":"road","elementType":"all","stylers":[{"visibility":"on"}]},{"featureType":"road.highway","elementType":"all","stylers":[{"visibility":"off"}]},{"featureType":"road.highway","elementType":"geometry","stylers":[{"visibility":"on"}]},{"featureType":"road.highway","elementType":"geometry.fill","stylers":[{"visibility":"on"}]},{"featureType":"road.highway","elementType":"geometry.stroke","stylers":[{"visibility":"simplified"},{"color":"#a05519"},{"saturation":"-13"}]},{"featureType":"road.local","elementType":"all","stylers":[{"visibility":"on"}]},{"featureType":"transit","elementType":"all","stylers":[{"visibility":"simplified"}]},{"featureType":"transit","elementType":"geometry","stylers":[{"visibility":"simplified"}]},{"featureType":"transit.station","elementType":"geometry","stylers":[{"visibility":"on"}]},{"featureType":"water","elementType":"all","stylers":[{"visibility":"simplified"},{"color":"#84afa3"},{"lightness":52}]},{"featureType":"water","elementType":"geometry","stylers":[{"visibility":"on"}]},{"featureType":"water","elementType":"geometry.fill","stylers":[{"visibility":"on"}]}]
   };
 
