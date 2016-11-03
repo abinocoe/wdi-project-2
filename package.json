@@ -4,7 +4,8 @@
   "description": "This is the second project for WDI London",
   "main": "index.js",
   "scripts": {
-    "test": "istanbul cover node_modules/.bin/_mocha"
+    "test": "istanbul cover node_modules/.bin/_mocha",
+    "postinstall": "node node_modules/bower/bin/bower install"
   },
   "repository": {
     "type": "git",
@@ -19,6 +20,7 @@
   "dependencies": {
     "bcrypt": "^0.8.7",
     "body-parser": "^1.15.2",
+    "bower": "^1.7.9",
     "cheerio": "^0.22.0",
     "cors": "^2.8.1",
     "express": "^4.14.0",
