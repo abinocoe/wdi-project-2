@@ -45,7 +45,8 @@ treasureMap.loopThroughFinds = function(data) {
 };
 
 treasureMap.getFinds = function() {
-  $.get('http://localhost:3000/api/finds').done(this.loopThroughFinds.bind(this));
+  // $.get('http://localhost:3000/api/finds').done(this.loopThroughFinds.bind(this));
+  $.get('https://frozen-cliffs-13270.herokuapp.com/api/finds').done(this.loopThroughFinds.bind(this));
   console.log(find.objectType);
 };
 
@@ -169,7 +170,8 @@ treasureMap.login = function() {
     };
 
     treasureMap.init = function() {
-      this.apiUrl  = "http://localhost:3000/api";
+      // this.apiUrl  = "http://localhost:3000/api";
+      this.apiUrl  = "https://frozen-cliffs-13270.herokuapp.com/api";
       this.$forms  = $(".forms");
       this.$main   = $("main");
       this.markers = [];
