@@ -5,10 +5,11 @@ const cors       = require('cors');
 const mongoose   = require('mongoose');
 
 const app        = express();
+const environment = app.get('env');
 const config     = require('./config/config');
 const router     = require('./config/routes');
 
-mongoose.connect(config.db);
+mongoose.connect(config.db[environment]);
 
 app.use(morgan('dev'));
 app.use(bodyParser.json());
@@ -20,3 +21,4 @@ app.use('/', router);
 app.use('/api', router);
 
 app.listen(config.port, () => console.log(`WooooHoooo on port ${config.port}`));
+module.exports = app;
