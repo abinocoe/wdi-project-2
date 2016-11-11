@@ -9,7 +9,7 @@ const environment = app.get('env');
 const config     = require('./config/config');
 const router     = require('./config/routes');
 
-mongoose.connect(config.db[environment]);
+mongoose.connect(config.db[production]);
 
 app.use(morgan('dev'));
 app.use(bodyParser.json());
