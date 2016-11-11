@@ -7,7 +7,7 @@ let url          = "https://finds.org.uk/database/search/results/q/pipe/thumbnai
 let urlend       = "/format/json";
 let count        = 0;
 
-mongoose.connect("mongodb://heroku_40nt4r4d:cqd4pilbhbi9ej4cdikhs1gu52@ds033076.mlab.com:33076/heroku_40nt4r4d");
+mongoose.connect(config.db);
 
 Find.collection.drop();
 
