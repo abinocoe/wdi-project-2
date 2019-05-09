@@ -1,7 +1,5 @@
 {
-  "addons": [
-    "mongolab"
-  ],
+  "addons": ["mongolab"],
   "buildpacks": [
     {
       "url": "heroku/nodejs"
@@ -21,7 +19,6 @@
     }
   },
   "name": "wdi-project-2",
-  "scripts": {
-  },
-  "stack": "cedar-14"
+  "scripts": {},
+  "stack": "heroku-18"
 }
